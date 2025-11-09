@@ -1,73 +1,31 @@
-# React + TypeScript + Vite
+# 🛠️ Git 개발 Workflow 가이드
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+본 프로젝트의 모든 개발은 **`dev`** 브랜치를 기반으로 진행됩니다. 새로운 기능 개발 및 버그 수정 시 다음 8단계의 워크플로우를 반드시 준수해 주십시오.
 
-Currently, two official plugins are available:
+## 🚀 기능 개발 및 PR 생성 절차
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| 단계  | 명령어 및 작업 내용              | 설명                                                                                             | 예시                                                   |
+| :---- | :------------------------------- | :----------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
+| **1** | `git pull origin dev`            | 개발 시작 전, 최신 `dev` 브랜치 내용을 로컬로 가져와 동기화합니다.                               | -                                                      |
+| **2** | `git checkout -b feature/기능명` | `dev` 기반으로 새로운 기능 개발 브랜치를 생성하고 이동합니다.                                    | `git checkout -b feature/leftGNB`                      |
+| **3** | **개발 진행**                    | 생성한 브랜치에서 기능 개발을 진행합니다.                                                        | -                                                      |
+| **4** | `git commit -m "feat: 내용"`     | 의미 있는 작업 단위로 커밋을 생성합니다. (**커밋 타입 준수**)                                    | `git commit -m "feat: 좌측 GNB 제작 및 스타일링 완료"` |
+| **5** | `git fetch origin dev`           | 로컬 작업 중 다른 팀원이 `dev`에 올린 변경 사항이 있는지 확인합니다.                             | -                                                      |
+| **6** | `git pull origin dev`            | 최신 `dev` 브랜치 내용을 내 개발 브랜치에 병합하여 충돌을 미리 해결합니다.                       | -                                                      |
+| **7** | `git push origin 브랜치명`       | 개발이 완료된 브랜치를 원격 저장소로 푸시합니다.                                                 | `git push origin feature/leftGNB`                      |
+| **8** | **GitHub PR 생성**               | GitHub 웹페이지에서 **`개발 브랜치`** → **`dev`** 브랜치로 병합 요청(Pull Request)을 생성합니다. | -                                                      |
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 📝 커밋 메시지 타입 가이드
 
-## Expanding the ESLint configuration
+커밋 메시지(`git commit -m "Type: 내용"`) 작성 시 가독성과 이력 관리를 위해 다음 타입을 사용합니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `feat`: 새로운 기능 추가
+- `fix`: 버그 수정
+- `style`: 코드 포맷팅, 세미콜론 등 스타일 관련 변경 (기능 변경 없음)
+- `refactor`: 코드 리팩토링 (기능 변경 없음)
+- `docs`: 문서 수정 (README, 주석 등)
+- `chore`: 빌드 설정, 라이브러리 설치 등 기타 변경 사항
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
