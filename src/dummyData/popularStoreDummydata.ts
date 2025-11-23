@@ -1,0 +1,91 @@
+import store1 from "../assets/storeImg/store1.png";
+import store2 from "../assets/storeImg/store2.png";
+import store3 from "../assets/storeImg/store3.png";
+import store4 from "../assets/storeImg/store4.png";
+import store5 from "../assets/storeImg/store5.png";
+import store6 from "../assets/storeImg/store6.png";
+import store7 from "../assets/storeImg/store7.png";
+import store8 from "../assets/storeImg/store8.png";
+
+export const popularStoresDummyData = [
+  {
+    name: "달콤한 케이크하우스",
+    rating: 4.9,
+    tags: ["디저트", "케이크", "카페"],
+    location: "서울 강남구 도산대로 123",
+    description: "신선한 재료로 만든 수제 케이크와 아늑한 카페 공간.",
+    src: store8,
+  },
+  {
+    name: "베이커리온더코너",
+    rating: 4.7,
+    tags: ["베이커리", "빵", "커피"],
+    location: "서울 마포구 와우산로 45",
+    description: "다양한 빵과 원두 커피가 인기인 홍대 베이커리 카페.",
+    src: store7,
+  },
+  {
+    name: "모찌와케이크",
+    rating: 4.8,
+    tags: ["모찌", "케이크", "일본식"],
+    location: "서울 용산구 이태원로 89",
+    description: "일본식 모찌와 케이크를 전문으로 하는 편안한 공간.",
+    src: store6,
+  },
+  {
+    name: "카페라벨",
+    rating: 4.5,
+    tags: ["커피", "디저트", "브런치"],
+    location: "서울 서초구 반포대로 56",
+    description: "맛있는 커피와 브런치, 디저트 메뉴가 풍부한 카페.",
+    src: store4,
+  },
+  {
+    name: "슈가베이커",
+    rating: 4.6,
+    tags: ["베이커리", "케이크", "생과일"],
+    location: "서울 송파구 올림픽로 77",
+    description: "신선한 생과일을 사용한 케이크와 빵을 판매하는 베이커리.",
+    src: store5,
+  },
+  {
+    name: "플레인케이크",
+    rating: 4.3,
+    tags: ["케이크", "디저트", "전통"],
+    location: "서울 종로구 세종대로 101",
+    description: "전통적인 케이크와 디저트를 제공하는 따뜻한 분위기.",
+    src: store3,
+  },
+  {
+    name: "페이스트리무드",
+    rating: 4.7,
+    tags: ["패스트리", "커피", "브런치"],
+    location: "서울 강서구 공항대로 150",
+    description: "다양한 페이스트리와 커피, 그리고 브런치 메뉴가 인기.",
+    src: store7,
+  },
+  {
+    name: "케이크앤조이",
+    rating: 4.4,
+    tags: ["케이크", "커피", "디저트카페"],
+    location: "서울 강남구 테헤란로 321",
+    description: "다양한 커피와 디저트를 함께 즐길 수 있는 카페.",
+    src: store8,
+  },
+  {
+    name: "베이커리24",
+    rating: 4.2,
+    tags: ["베이커리", "빵", "아침식사"],
+    location: "서울 동작구 흑석로 18",
+    description: "아침식사로 좋은 신선한 빵과 베이커리 전문점.",
+    src: store1,
+  },
+  {
+    name: "카페모카",
+    rating: 4.5,
+    tags: ["커피", "모카", "디저트"],
+    location: "서울 영등포구 선유로 97",
+    description: "특색 있는 모카 커피와 디저트가 유명한 카페.",
+    src: store2,
+  },
+];
