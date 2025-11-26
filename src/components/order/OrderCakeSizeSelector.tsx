@@ -6,10 +6,16 @@ export function OrderCakeSizeSelector({
   selectedSize,
   error,
   setValue,
+  cakeNotice,
 }: OrderCakeSizeSelectorProps) {
+  const isNoticeActive = !!cakeNotice;
   const handleChange = (idx: number, sizeName: string) => {
-    setValue("selectedSizeIndex", idx.toString(), { shouldValidate: true });
+    // ⭐️ 비활성화된 옵션은 선택하지 못하도록 가드 로직 추가
+    if (isNoticeActive && idx === 0) {
+      return;
+    }
 
+    setValue("selectedSizeIndex", idx.toString(), { shouldValidate: true });
     setValue("cakeSize", sizeName, { shouldValidate: true });
   };
   return (
@@ -18,16 +24,26 @@ export function OrderCakeSizeSelector({
       <div className="flex flex-col w-full gap-y-4">
         {sizes.map((cake, idx) => {
           const isSelected = String(selectedSize) === String(idx);
+          const isDisabled = isNoticeActive && idx === 0;
           return (
             <label
               key={idx}
-              className={`w-full border-2 rounded-xl h-20 px-10 flex items-center justify-between cursor-pointer
+              className={`w-full border-2 rounded-xl h-20 px-10 flex items-center justify-between
                 ${
-                  isSelected
+                  isDisabled
+                    ? "opacity-50 cursor-not-allowed bg-gray-50"
+                    : "cursor-pointer"
+                }
+                ${
+                  isSelected && !isDisabled
                     ? "border-blue-500 bg-blue-50"
                     : "border-[#000000]/10"
                 }`}
-              onClick={() => handleChange(idx, cake.sizeName)}
+              onClick={() => {
+                if (!isDisabled) {
+                  handleChange(idx, cake.sizeName);
+                }
+              }}
             >
               <input
                 type="radio"
@@ -36,6 +52,7 @@ export function OrderCakeSizeSelector({
                 checked={isSelected}
                 onChange={() => handleChange(idx, cake.sizeName)}
                 className="hidden"
+                disabled={isDisabled}
               />
               <div>
                 <div className="font-bold">

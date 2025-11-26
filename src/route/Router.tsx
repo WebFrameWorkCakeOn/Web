@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import OrderPage from "../pages/OrderPage";
 import StorePage from "../pages/StorePage";
 import MyPage from "../pages/MyPage";
+import OrderDetailPage from "../pages/OrderDetailPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "my-page",
         element: <MyPage />,
+      },
+      {
+        path: "order-detail",
+        element: <OrderDetailPage />,
       },
       // 나중에 "/about" 페이지를 추가하고 싶다면 여기에 추가하면 됨,, 상욱아
       // {

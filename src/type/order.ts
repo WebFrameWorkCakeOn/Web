@@ -25,6 +25,7 @@ export interface OrderCakeSizeSelectorProps {
   selectedSize: string | null;
   error?: FieldError;
   setValue: UseFormSetValue<OrderFormValues>;
+  cakeNotice?: string;
 }
 
 //케이크 맛 프롭스
