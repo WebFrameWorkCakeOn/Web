@@ -18,7 +18,7 @@ export const MyPage = () => {
         {/* Profile Icon */}
 
         {/* Profile Card */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 bg-[#22183E] rounded-[50px] shadow-[0px_20px_60px_-15px_rgba(236,72,153,0.4)]">
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 shadow-[0px_20px_60px_-15px_rgba(236,72,153,0.4)]">
           <div className="flex flex-col items-center pt-5 mb-6">
             <img src={CAKE_ON} className="w-40 h-10" alt="CACEON" />
             <h1 className="text-xl text-black pt-5 font-semibold mb-1">

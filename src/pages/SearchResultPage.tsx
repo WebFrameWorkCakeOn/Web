@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { SearchInputGroup } from "../components/homepage/SearchInputGroup";
 import SectionHeader from "../components/homepage/SectionHeader";
-import PopularStoreCard from "../components/homepage/PopularStoreCard";
-import { popularStoresDummyData } from "../dummyData/popularStoreDummydata";
+
+import { popularStoresDummyData } from "../dummyData/StoreDummydata";
+import StoreCard from "../components/homepage/StoreCard";
 
 const SearchResultPage = () => {
   const location = useLocation();
@@ -37,7 +38,7 @@ const SearchResultPage = () => {
         />
         <div className="grid grid-cols-3 grid-rows-2 gap-7 justify-center items-center">
           {searchResults.map((data) => (
-            <PopularStoreCard
+            <StoreCard
               key={data.id}
               id={data.id}
               name={data.name}

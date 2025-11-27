@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const hoverEffect = "hover:scale-110 duration-600";
+export const hoverEffect = "transition transform hover:scale-105 duration-400";
 
 export const loginButtonHoverEffect =
   "hover:bg-black hover:text-white transition-colors duration-300";

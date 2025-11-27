@@ -1,9 +1,9 @@
 import { MapPin, Star } from "lucide-react";
-import type { PopularStoreProps } from "../../type/store"; // 오타 주의: Populaar → Popular!
+import type { PopularStoreProps } from "../../type/store";
 import { Link } from "react-router-dom";
 import { hoverEffect } from "../Navbar";
 
-const PopularStoreCard = ({
+const StoreCard = ({
   name,
   rating,
   location,
@@ -37,10 +37,10 @@ const PopularStoreCard = ({
           className={`w-1/4 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center ${hoverEffect}`}
         >
           픽업하기
-        </Link>
+        </Link>{" "}
       </div>
     </div>
   );
 };
 
-export default PopularStoreCard;
+export default StoreCard;
