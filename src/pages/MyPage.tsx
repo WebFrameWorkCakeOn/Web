@@ -1,29 +1,34 @@
-import { Mail, Phone, MapPin, User, Edit} from "lucide-react"
-import CAKE_ON from "../assets/icons/CAKE_ON.png"
+import { Mail, Phone, MapPin, User, Edit } from "lucide-react";
+import CAKE_ON from "../assets/icons/CAKE_ON.png";
 // import { bgBlack } from "./IntroductionPage";
 
 export const MyPage = () => {
-  const inputcss = "pl-14 w-90 bg-white/5 border-1 border-black/10 text-black placeholder:text-black/40 h-11 rounded-3xl focus:outline-none focus:ring-0 focus:border-black/50"
-  const infocss = "text-xs text-thin text-white/80"
+  const inputcss =
+    "pl-14 w-90 bg-white/5 border-1 border-black/10 text-black placeholder:text-black/40 h-11 rounded-3xl focus:outline-none focus:ring-0 focus:border-black/50";
+  const infocss = "text-xs text-thin text-white/80";
   return (
-    <div className={`relative w-full min-h-screen pt-30 p-20 flex flex-col border-t border-gray-200 gap-20 items-center`}>
+    <div
+      className={`relative w-full min-h-screen pt-30 p-20 flex flex-col border-t border-gray-200 gap-20 items-center`}
+    >
       {/* Gradient overlay effects */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#f6339a]/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#f6339a]/10 rounded-full blur-3xl" />
 
       <div className="w-full max-w-md relative z-10 my-8">
         {/* Profile Icon */}
-        
 
         {/* Profile Card */}
         <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 bg-[#22183E] rounded-[50px] shadow-[0px_20px_60px_-15px_rgba(236,72,153,0.4)]">
           <div className="flex flex-col items-center pt-5 mb-6">
-             <img src={CAKE_ON} className="w-40 h-10" alt="CACEON" />
-            <h1 className="text-xl text-black pt-5 font-semibold mb-1">마이페이지</h1>
-           
+            <img src={CAKE_ON} className="w-40 h-10" alt="CACEON" />
+            <h1 className="text-xl text-black pt-5 font-semibold mb-1">
+              마이페이지
+            </h1>
 
-            <p className="text-sm text-black/60">내 정보를 확인하고 수정하세요.</p>
-         </div>
+            <p className="text-sm text-black/60">
+              내 정보를 확인하고 수정하세요.
+            </p>
+          </div>
           <div className="space-y-4">
             {/* Name Input */}
             <div className="space-y-2">
@@ -110,8 +115,6 @@ export const MyPage = () => {
             </button>
           </div>
         </div>
-
-       
       </div>
     </div>
   );

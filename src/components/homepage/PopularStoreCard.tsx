@@ -1,6 +1,7 @@
 import { MapPin, Star } from "lucide-react";
 import type { PopulaarStoreProps } from "../../type/store";
 import { Link } from "react-router-dom";
+import { hoverEffect } from "../Navbar";
 
 const PopularStoreCard = ({
   name,
@@ -33,7 +34,7 @@ const PopularStoreCard = ({
         </div>
         <Link
           to="/"
-          className="w-1/4 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center"
+          className={`w-1/4 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center ${hoverEffect}`}
         >
           픽업하기
         </Link>
