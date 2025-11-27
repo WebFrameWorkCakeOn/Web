@@ -101,8 +101,7 @@ export const popularStoresDummyData = [
     rating: 4.5,
     tags: ["디저트", "타르트", "선물용"],
     location: "경기 고양시 일산서구 주엽로 88",
-    description:
-      "생일 및 기념일을 위한 특별한 수제 타르트와 케이크를 판매합니다.",
+    description: " 기념일을 위한 특별한 수제 타르트와 케이크를 판매합니다.",
     src: store2,
   },
   {

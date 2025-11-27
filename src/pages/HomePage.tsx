@@ -2,8 +2,9 @@ import SearchBar from "../components/homepage/HomeSearchBar";
 import RecommendedCakeCard from "../components/homepage/RecommendedCakeCard";
 import { recommendedDummyData } from "../dummyData/recommendedDummyData";
 import SectionHeader from "../components/homepage/SectionHeader";
-import PopularStoreCard from "../components/homepage/PopularStoreCard";
-import { popularStoresDummyData } from "../dummyData/popularStoreDummydata";
+
+import { popularStoresDummyData } from "../dummyData/StoreDummydata";
+import StoreCard from "../components/homepage/StoreCard";
 
 const HomePage = () => {
   return (
@@ -31,7 +32,7 @@ const HomePage = () => {
         />
         <div className="grid grid-cols-3 grid-rows-2 gap-7 justify-center items-center">
           {popularStoresDummyData.slice(0, 6).map((data, i) => (
-            <PopularStoreCard key={i} {...data} />
+            <StoreCard key={i} {...data} />
           ))}
         </div>
       </div>
