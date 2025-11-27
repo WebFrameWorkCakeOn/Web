@@ -1,5 +1,5 @@
 import { MapPin, Star } from "lucide-react";
-import type { PopularStoreProps } from "../../type/store"; // 오타 주의: Populaar → Popular!
+import type { PopularStoreProps } from "../../type/store";
 import { Link } from "react-router-dom";
 import { hoverEffect } from "../Navbar";
 

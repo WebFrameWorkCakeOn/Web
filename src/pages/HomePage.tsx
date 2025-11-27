@@ -1,70 +1,28 @@
-// src/pages/HomePage.tsx
-
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase"; // getFirestore(firebaseApp)
-
 import SearchBar from "../components/homepage/HomeSearchBar";
 import RecommendedCakeCard from "../components/homepage/RecommendedCakeCard";
 import SectionHeader from "../components/homepage/SectionHeader";
-
-import { popularStoresDummyData } from "../dummyData/StoreDummydata";
 import StoreCard from "../components/homepage/StoreCard";
-
-// ===== 타입 정의 =====
-
-type PopularStore = {
-  id: string;
-  name: string;
-  rating: number;
-  location: string;
-  description: string;
-  imageUrl: string;
-};
-
-type RecommendedCake = {
-  id: string;
-  name: string;
-  store: string;
-  rating: number;
-  price: number;
-  imageUrl: string;
-};
-
-// ===== 컴포넌트 =====
+import { usePopularStores } from "../hooks/usePopularStores";
+import { useRecommendedCakes } from "../hooks/useRecommendedCakes";
 
 const HomePage = () => {
-  const [recommendedCakes, setRecommendedCakes] = useState<RecommendedCake[]>(
-    []
-  );
-  const [popularStores, setPopularStores] = useState<PopularStore[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    cakes: recommendedCakes, //구조분해 할당 + 별칭!
+    loading: cakesLoading,
+    error: cakesError,
+  } = useRecommendedCakes();
+  const {
+    stores: popularStores,
+    loading: storesLoading,
+    error: storesError,
+  } = usePopularStores();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const cakesSnap = await getDocs(collection(db, "RecommendedCake"));
-        const cakes: RecommendedCake[] = cakesSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<RecommendedCake, "id">),
-        }));
+  const loading = cakesLoading || storesLoading;
+  const error = cakesError || storesError;
 
-        const storesSnap = await getDocs(collection(db, "popularStores"));
-        const stores: PopularStore[] = storesSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<PopularStore, "id">),
-        }));
-
-        setRecommendedCakes(cakes);
-        setPopularStores(stores);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  if (error) {
+    return <div>오류 발생: {error.message}</div>;
+  }
 
   if (loading) {
     return <div>로딩중...</div>;
@@ -96,8 +54,8 @@ const HomePage = () => {
           linkTo="/"
         />
         <div className="grid grid-cols-3 grid-rows-2 gap-7 justify-center items-center">
-          {popularStoresDummyData.slice(0, 6).map((data, i) => (
-            <StoreCard imageUrl={""} key={i} {...data} />
+          {popularStores.slice(0, 6).map((data, i) => (
+            <StoreCard key={i} {...data} />
           ))}
         </div>
       </div>
