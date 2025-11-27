@@ -1,8 +1,8 @@
-export interface PopulaarStoreProps {
+export interface PopularStoreProps {
+  id: string;
   name: string;
   rating: number;
-  tags: string[];
   location: string;
   description: string;
-  src: string;
+  imageUrl: string;
 }
