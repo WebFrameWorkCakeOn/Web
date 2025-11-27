@@ -8,7 +8,7 @@ import StoreCard from "../components/homepage/StoreCard";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col w-full gap-y-6 min-h-screen ">
+    <div className="flex flex-col w-full gap-y-6 min-h-screen pb-10 ">
       <SearchBar />
       <div className="px-10 flex flex-col gap-y-6">
         <SectionHeader

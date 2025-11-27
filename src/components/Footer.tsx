@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-100 text-center py-6 mt-10 border-t border-gray-300">
+    <footer className="w-full bg-gray-100 text-center py-6  border-t border-gray-300">
       <p className="text-sm text-gray-600">
         © 2025 CakeOn Inc. All rights reserved.
       </p>
