@@ -1,4 +1,4 @@
-import SearchBar from "../components/homepage/SearchBar";
+import SearchBar from "../components/homepage/HomeSearchBar";
 import RecommendedCakeCard from "../components/homepage/RecommendedCakeCard";
 import { recommendedDummyData } from "../dummyData/recommendedDummyData";
 import SectionHeader from "../components/homepage/SectionHeader";
