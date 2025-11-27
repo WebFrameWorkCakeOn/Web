@@ -1,5 +1,5 @@
 import { MapPin, Star } from "lucide-react";
-import type { PopulaarStoreProps } from "../../type/store";
+import type { PopularStoreProps } from "../../type/store"; // 오타 주의: Populaar → Popular!
 import { Link } from "react-router-dom";
 import { hoverEffect } from "../Navbar";
 
@@ -8,12 +8,12 @@ const PopularStoreCard = ({
   rating,
   location,
   description,
-  src,
-}: PopulaarStoreProps) => {
+  imageUrl, // src -> imageUrl로 변경!
+}: PopularStoreProps) => {
   return (
     <div className="w-full aspect-square border border-black/20 rounded-2xl">
       <img
-        src={src}
+        src={imageUrl} // 변경!
         alt={name}
         className="w-full h-2/3 object-cover rounded-md mb-4"
       />

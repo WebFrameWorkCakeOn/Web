@@ -3,5 +3,5 @@ export interface RecommendedCakeProps {
   store: string;
   rating: number;
   price: number;
-  src: string;
+  imageUrl: string;
 }
