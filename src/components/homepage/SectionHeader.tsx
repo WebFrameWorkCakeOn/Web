@@ -4,7 +4,7 @@ import { hoverEffect } from "../Navbar";
 interface SectionHeaderProps {
   title: string;
   description: string;
-  linkText: string;
+  linkText?: string;
   linkTo: string;
   className?: string;
 }
@@ -22,12 +22,14 @@ const SectionHeader = ({
         <div className="text-2xl">{title}</div>
         <div className="text-lg text-[#717182]">{description}</div>
       </div>
-      <Link
-        className={`w-25 h-10 border border-black/30 text-lg rounded-2xl flex items-center justify-center ${hoverEffect}`}
-        to={linkTo}
-      >
-        {linkText}
-      </Link>
+      {linkText && (
+        <Link
+          className={`w-25 h-10 border border-black/30 text-lg rounded-2xl flex items-center justify-center ${hoverEffect}`}
+          to={linkTo}
+        >
+          {linkText}
+        </Link>
+      )}
     </div>
   );
 };

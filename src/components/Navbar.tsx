@@ -7,7 +7,7 @@ export const loginButtonHoverEffect =
 
 const Navbar = () => {
   return (
-    <nav className="w-full h-20 bg-white px-10">
+    <nav className="w-full h-20 bg-white px-10 border-b border-[#000000]/15">
       <div className="flex items-center justify-between h-full">
         <Link className={`text-black text-4xl ${hoverEffect}`} to={"/"}>
           CAKE ON

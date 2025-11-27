@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase"; // getFirestore(firebaseApp)
 
-import SearchBar from "../components/homepage/SearchBar";
+import SearchBar from "../components/homepage/HomeSearchBar";
 import RecommendedCakeCard from "../components/homepage/RecommendedCakeCard";
 import SectionHeader from "../components/homepage/SectionHeader";
 import PopularStoreCard from "../components/homepage/PopularStoreCard";

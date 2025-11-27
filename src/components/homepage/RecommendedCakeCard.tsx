@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import type { RecommendedCakeProps } from "../../type/cake";
 import { Link } from "react-router-dom";
+import { hoverEffect } from "../Navbar";
 
 const RecommendedCakeCard = ({
   name,
@@ -29,8 +30,9 @@ const RecommendedCakeCard = ({
             {price.toLocaleString()}원
           </div>
           <Link
-            to="/"
-            className="w-1/3 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center"
+            to="order-detail"
+            state={{ cakeImage: imageUrl }}
+            className={`w-1/3 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center ${hoverEffect}`}
           >
             주문하기
           </Link>

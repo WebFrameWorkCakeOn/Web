@@ -1,5 +1,5 @@
 {
-  "name": "webframe-project",
+  "name": "cakeon",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/vite": "^4.1.17",
+    "firebase": "^12.6.0",
+    "lucide-react": "^0.553.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-datepicker": "^8.9.0",
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.66.1",
+    "react-router-dom": "^7.9.5",
+    "tailwindcss": "^4.1.17",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -25,11 +34,6 @@
     "globals": "^16.4.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "npm:rolldown-vite@7.1.14"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@7.1.14"
-    }
+    "vite": "^7.1.7"
   }
 }
