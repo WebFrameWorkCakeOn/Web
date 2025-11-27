@@ -250,7 +250,7 @@ const SignupPage = () => {
           {/* 회원가입 버튼 */}
           <button
             type="submit"
-            className={`w-full bg-pink-600 text-white py-2.5 rounded-lg font-semibold transition transform ${hoverEffect} mt-4 shadow-md`}
+            className={`w-full bg-black text-white py-2.5 rounded-lg font-semibold transition transform ${hoverEffect} mt-4 shadow-md`}
           >
             회원가입 하기
           </button>
@@ -259,7 +259,7 @@ const SignupPage = () => {
         <div className="text-center text-sm">
           <Link
             to="/login"
-            className={`text-pink-600 font-medium ${hoverEffect}`}
+            className={`text- black font-medium ${hoverEffect}`}
           >
             이미 계정이 있으신가요? 로그인
           </Link>

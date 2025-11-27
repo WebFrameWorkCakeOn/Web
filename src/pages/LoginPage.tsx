@@ -108,7 +108,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-pink-600 text-white py-2.5 rounded-lg font-semibold ${hoverEffect} mt-4 shadow-md disabled:opacity-50`}
+            className={`w-full bg-black text-white py-2.5 rounded-lg font-semibold ${hoverEffect} mt-4 shadow-md disabled:opacity-50`}
           >
             {isSubmitting ? "로그인 중..." : "로그인 하기"}
           </button>
@@ -116,15 +116,12 @@ const LoginPage = () => {
 
         <div className="space-y-3">
           <div className="text-center text-sm">
-            <a href="#" className={`text-pink-600 font-medium ${hoverEffect}`}>
+            <a href="#" className={` font-medium ${hoverEffect}`}>
               비밀번호를 잊으셨나요?
             </a>
           </div>
           <div className="text-center text-sm">
-            <Link
-              to="/sign-up"
-              className={`text-pink-600 font-medium ${hoverEffect}`}
-            >
+            <Link to="/sign-up" className={` font-medium ${hoverEffect}`}>
               회원가입
             </Link>
           </div>
