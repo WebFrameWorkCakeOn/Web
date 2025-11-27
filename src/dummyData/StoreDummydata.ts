@@ -9,6 +9,7 @@ import store8 from "../assets/storeImg/store8.png";
 
 export const popularStoresDummyData = [
   {
+    id: "store1",
     name: "달콤한 케이크하우스",
     rating: 4.9,
     tags: ["디저트", "케이크", "카페"],
@@ -17,6 +18,7 @@ export const popularStoresDummyData = [
     src: store8,
   },
   {
+    id: "store1",
     name: "베이커리온더코너",
     rating: 4.7,
     tags: ["베이커리", "빵", "커피"],
@@ -25,6 +27,7 @@ export const popularStoresDummyData = [
     src: store7,
   },
   {
+    id: "store1",
     name: "모찌와케이크",
     rating: 4.8,
     tags: ["모찌", "케이크", "일본식"],
@@ -33,6 +36,7 @@ export const popularStoresDummyData = [
     src: store6,
   },
   {
+    id: "store1",
     name: "카페라벨",
     rating: 4.5,
     tags: ["커피", "디저트", "브런치"],
@@ -41,6 +45,7 @@ export const popularStoresDummyData = [
     src: store4,
   },
   {
+    id: "store1",
     name: "슈가베이커",
     rating: 4.6,
     tags: ["베이커리", "케이크", "생과일"],
@@ -49,6 +54,7 @@ export const popularStoresDummyData = [
     src: store5,
   },
   {
+    id: "store1",
     name: "플레인케이크",
     rating: 4.3,
     tags: ["케이크", "디저트", "전통"],
@@ -57,6 +63,7 @@ export const popularStoresDummyData = [
     src: store3,
   },
   {
+    id: "store1",
     name: "페이스트리무드",
     rating: 4.7,
     tags: ["패스트리", "커피", "브런치"],
@@ -65,6 +72,7 @@ export const popularStoresDummyData = [
     src: store7,
   },
   {
+    id: "store1",
     name: "케이크앤조이",
     rating: 4.4,
     tags: ["케이크", "커피", "디저트카페"],
@@ -73,6 +81,7 @@ export const popularStoresDummyData = [
     src: store8,
   },
   {
+    id: "store1",
     name: "베이커리24",
     rating: 4.2,
     tags: ["베이커리", "빵", "아침식사"],
@@ -81,6 +90,7 @@ export const popularStoresDummyData = [
     src: store1,
   },
   {
+    id: "store1",
     name: "카페모카",
     rating: 4.5,
     tags: ["커피", "모카", "디저트"],
@@ -89,6 +99,7 @@ export const popularStoresDummyData = [
     src: store2,
   },
   {
+    id: "store1",
     name: "달콤한 작업실 170",
     rating: 4.8,
     tags: ["주문제작", "레터링", "케이크"],
@@ -97,6 +108,7 @@ export const popularStoresDummyData = [
     src: store1,
   },
   {
+    id: "store1",
     name: "마이 스위트 메모리",
     rating: 4.5,
     tags: ["디저트", "타르트", "선물용"],
@@ -105,6 +117,7 @@ export const popularStoresDummyData = [
     src: store2,
   },
   {
+    id: "store1",
     name: "플레인 케이크 일산점",
     rating: 4.3,
     tags: ["클래식", "생크림", "전통"],
@@ -113,6 +126,7 @@ export const popularStoresDummyData = [
     src: store3,
   },
   {
+    id: "store1",
     name: "어썸 컵케이크",
     rating: 4.9,
     tags: ["컵케이크", "파티", "소규모"],
@@ -121,6 +135,7 @@ export const popularStoresDummyData = [
     src: store4,
   },
   {
+    id: "store1",
     name: "해피데이즈 베이킹",
     rating: 4.6,
     tags: ["퓨전", "쌀베이킹", "비건"],
@@ -129,6 +144,7 @@ export const popularStoresDummyData = [
     src: store5,
   },
   {
+    id: "store1",
     name: "카페 슈슈",
     rating: 4.1,
     tags: ["카페", "브런치", "당일픽업"],
@@ -137,6 +153,7 @@ export const popularStoresDummyData = [
     src: store6,
   },
   {
+    id: "store1",
     name: "디어 마이 케이크",
     rating: 4.7,
     tags: ["고급", "프리미엄", "예약제"],
@@ -145,6 +162,7 @@ export const popularStoresDummyData = [
     src: store7,
   },
   {
+    id: "store1",
     name: "블루밍 블룸",
     rating: 4.4,
     tags: ["꽃", "플라워케이크", "버터크림"],
@@ -154,6 +172,7 @@ export const popularStoresDummyData = [
     src: store8,
   },
   {
+    id: "store1",
     name: "초코홀릭 라운지",
     rating: 4.7,
     tags: ["초코", "브라우니", "진한맛"],
@@ -162,6 +181,7 @@ export const popularStoresDummyData = [
     src: store1,
   },
   {
+    id: "store1",
     name: "미니미 케이크",
     rating: 4.2,
     tags: ["도시락", "미니케이크", "가성비"],

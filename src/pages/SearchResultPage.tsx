@@ -37,8 +37,16 @@ const SearchResultPage = () => {
           linkTo="/"
         />
         <div className="grid grid-cols-3 grid-rows-2 gap-7 justify-center items-center">
-          {searchResults.map((data, i) => (
-            <StoreCard key={i} {...data} />
+          {searchResults.map((data) => (
+            <StoreCard
+              key={data.id}
+              id={data.id}
+              name={data.name}
+              rating={data.rating}
+              location={data.location}
+              description={data.description}
+              imageUrl={data.src} // src를 imageUrl로 매핑
+            />
           ))}
         </div>
 

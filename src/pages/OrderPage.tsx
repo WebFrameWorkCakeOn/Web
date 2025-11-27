@@ -23,8 +23,24 @@ import { orderFormSchema } from "../schema/orderFormSchema";
 import { useState } from "react";
 import { OrderConfirmationModal } from "../components/order/OrderConfirmationModal";
 import { useNavigate } from "react-router-dom";
+import { storage, db } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getAuth, signInAnonymously } from "firebase/auth";
+import { useEffect } from "react";
 
 export default function OrderPage() {
+  useEffect(() => {
+    const auth = getAuth();
+    signInAnonymously(auth)
+      .then(() => {
+        console.log("익명 인증 성공");
+      })
+      .catch((error) => {
+        console.error("익명 인증 실패", error);
+      });
+  }, []);
+
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
@@ -85,10 +101,52 @@ export default function OrderPage() {
   };
 
   // 폼 제출
-  const onSubmit = (data: OrderFormValues) => {
-    console.log("최종 주문 데이터:", data);
-    console.log("watch 결과 (폼 전체 값):", watch());
-    openModal();
+  // const onSubmit = (data: OrderFormValues) => {
+  //   console.log("최종 주문 데이터:", data);
+  //   console.log("watch 결과 (폼 전체 값):", watch());
+  //   openModal();
+  // };
+
+  const onSubmit = async (data: OrderFormValues) => {
+    try {
+      // 1. 이미지 파일이 있으면 Storage에 업로드
+      let imageUrl = "";
+      if (data.file) {
+        const storageRef = ref(
+          storage,
+          `cakeDesigns/${Date.now()}_${data.file.name}`
+        );
+        const snapshot = await uploadBytes(storageRef, data.file);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      // 2. Firestore에 주문 데이터 저장 (이미지 URL 포함)
+      await addDoc(collection(db, "orders"), {
+        userName: data.userName,
+        userPhone: data.userPhone,
+        pickupDateTime: data.pickupDateTime
+          ? data.pickupDateTime.toISOString()
+          : null,
+        fileName: data.fileName,
+        imageUrl: imageUrl, // Storage에 업로드된 이미지 URL
+        selectedSizeIndex: data.selectedSizeIndex,
+        selectedFlavorIndex: data.selectedFlavorIndex,
+        selectedShapeIndex: data.selectedShapeIndex,
+        message: data.message,
+        etc: data.etc,
+        agreed: data.agreed,
+        candleCount: data.candleCount,
+        isCoolerBagSelected: data.isCoolerBagSelected,
+        cakeSize: data.cakeSize,
+        createdAt: serverTimestamp(),
+      });
+
+      console.log("최종 주문 데이터:", data);
+      openModal();
+    } catch (error) {
+      console.error("주문 중 에러 발생:", error);
+      alert("주문 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
