@@ -26,20 +26,25 @@ import { useNavigate } from "react-router-dom";
 import { storage, db } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
 
 export default function OrderPage() {
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const [user, setUser] = useState(auth.currentUser);
+
   useEffect(() => {
-    const auth = getAuth();
-    signInAnonymously(auth)
-      .then(() => {
-        console.log("익명 인증 성공");
-      })
-      .catch((error) => {
-        console.error("익명 인증 실패", error);
-      });
-  }, []);
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      if (!currentUser) {
+        // 로그인 안된 경우 로그인 페이지로 이동
+        navigate("/login");
+      } else {
+        setUser(currentUser);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
@@ -87,7 +92,6 @@ export default function OrderPage() {
     setValue("isCoolerBagSelected", !isCoolerBagSelected);
   };
   //주문 하면 홈으로
-  const navigate = useNavigate();
   const handleOrderComplete = () => {
     navigate("/", { state: { message: "주문 성공!" } });
   };
@@ -108,8 +112,12 @@ export default function OrderPage() {
   // };
 
   const onSubmit = async (data: OrderFormValues) => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     try {
-      // 1. 이미지 파일이 있으면 Storage에 업로드
       let imageUrl = "";
       if (data.file) {
         const storageRef = ref(
@@ -120,15 +128,15 @@ export default function OrderPage() {
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
-      // 2. Firestore에 주문 데이터 저장 (이미지 URL 포함)
       await addDoc(collection(db, "orders"), {
+        userId: user.uid, // 로그인 사용자 UID 저장
         userName: data.userName,
         userPhone: data.userPhone,
         pickupDateTime: data.pickupDateTime
           ? data.pickupDateTime.toISOString()
           : null,
         fileName: data.fileName,
-        imageUrl: imageUrl, // Storage에 업로드된 이미지 URL
+        imageUrl,
         selectedSizeIndex: data.selectedSizeIndex,
         selectedFlavorIndex: data.selectedFlavorIndex,
         selectedShapeIndex: data.selectedShapeIndex,
@@ -141,7 +149,6 @@ export default function OrderPage() {
         createdAt: serverTimestamp(),
       });
 
-      console.log("최종 주문 데이터:", data);
       openModal();
     } catch (error) {
       console.error("주문 중 에러 발생:", error);
