@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
         element: <OrderPage />,
       },
       {
-        path: "store-page",
+        path: "store-page/:id",
         element: <StorePage />,
       },
       {
