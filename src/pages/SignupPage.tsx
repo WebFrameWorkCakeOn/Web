@@ -3,11 +3,18 @@ import { Cake, CakeSlice, Store } from "lucide-react";
 import { hoverEffect } from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import type { SignupFormData } from "../type/auth";
+import { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { FirebaseError } from "firebase/app";
+
 // 200줄 이내라서.. 컴포넌트 분리하면 타입 정의가 더 복잡할듯,,,!!
 const SignupPage = () => {
   const signupInputCss =
     "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-pink-500 focus:border-pink-500 transition duration-150";
   const navigate = useNavigate();
+  const auth = getAuth();
 
   const {
     register,
@@ -23,11 +30,60 @@ const SignupPage = () => {
   });
 
   const passwordValue = watch("password"); //  비밀번호 실시간 검사를 위해
+  const [firebaseError, setFirebaseError] = useState<string | null>(null); //회원가입 인증 오류를 위해
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); //성공 메시지 전달을 위해
 
-  const onSubmit: SubmitHandler<SignupFormData> = (data) => {
-    console.log("RHF 최종 데이터:", data);
-    alert(`가입 준비 완료! (역할: ${data.role})`);
-    //파이어베이스에 data 보내면 됨!
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
+    setFirebaseError(null);
+    setSuccessMessage(null);
+
+    try {
+      // 1. Firebase Auth로 사용자 생성
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const user = userCredential.user;
+
+      // 2. Firestore에 사용자 데이터 저장
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: data.email,
+        name: data.name,
+        phone: data.userPhone,
+        role: data.role,
+        createdAt: new Date().toISOString(),
+        emailVerified: false,
+        isActive: true,
+      });
+      setSuccessMessage("회원가입이 완료되었습니다!");
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 1500);
+    } catch (error: unknown) {
+      console.error("회원가입 실패:", error);
+
+      // Firebase 에러 메시지 처리
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            setFirebaseError("이미 사용 중인 이메일 주소입니다.");
+            break;
+          case "auth/invalid-email":
+            setFirebaseError("유효하지 않은 이메일 형식입니다.");
+            break;
+          case "auth/weak-password":
+            setFirebaseError("비밀번호가 너무 약합니다. (8자 이상)");
+            break;
+
+          default:
+            setFirebaseError(
+              "회원가입 중 오류가 발생했습니다. 다시 시도해 주세요."
+            );
+        }
+      }
+    }
   };
 
   return (
@@ -246,6 +302,22 @@ const SignupPage = () => {
               </p>
             )}
           </div>
+
+          {firebaseError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm text-center">
+                {firebaseError}
+              </p>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-600 text-sm text-center font-medium">
+                {successMessage}
+              </p>
+            </div>
+          )}
 
           {/* 회원가입 버튼 */}
           <button

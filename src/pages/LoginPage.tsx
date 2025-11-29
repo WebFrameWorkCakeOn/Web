@@ -2,6 +2,9 @@ import { Cake } from "lucide-react";
 import { hoverEffect } from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 interface LoginFormData {
   email: string;
@@ -19,9 +22,51 @@ const LoginPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({ mode: "onChange" });
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    console.log("로그인 데이터 전송:", data);
-    //여기에 ㅍ이어베이스 로직 추가 하면 됨..!
+  const [firebaseError, setFirebaseError] = useState<string | null>(null); //에러 관리
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); //성공 여부 관리
+
+  const authInstance = getAuth();
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    setFirebaseError(null);
+    setSuccessMessage(null);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        authInstance,
+        data.email,
+        data.password
+      );
+      const user = userCredential.user;
+
+      console.log("로그인 성공:", user.email);
+
+      setSuccessMessage("로그인되었습니다!");
+      setTimeout(() => {
+        navigate("/", { replace: true }); // 메인 페이지로 이동
+      }, 1500);
+    } catch (error: unknown) {
+      console.error("로그인 실패:", error);
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            setFirebaseError("등록된 계정이 없습니다.");
+            break;
+          case "auth/wrong-password":
+            setFirebaseError("비밀번호가 틀렸습니다.");
+            break;
+          case "auth/invalid-email":
+            setFirebaseError("유효하지 않은 이메일 형식입니다.");
+            break;
+          case "auth/too-many-requests":
+            setFirebaseError("비밀번호 재설정 후 다시 시도하세요.");
+            break;
+          default:
+            setFirebaseError("로그인 중 오류가 발생했습니다.");
+        }
+      }
+    }
   };
 
   return (
@@ -47,6 +92,21 @@ const LoginPage = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {firebaseError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm text-center">
+                {firebaseError}
+              </p>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-600 text-sm text-center font-medium">
+                {successMessage}
+              </p>
+            </div>
+          )}
           <div>
             <label
               htmlFor="email"
