@@ -40,7 +40,7 @@ const SearchResultPage = () => {
           {searchResults.map((data) => (
             <StoreCard
               key={data.id}
-              id={data.id}
+              storeid={parseInt(data.id)}
               name={data.name}
               rating={data.rating}
               location={data.location}

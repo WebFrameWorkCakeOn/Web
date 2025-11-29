@@ -1,5 +1,5 @@
 import { useForm, FormProvider } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
@@ -82,24 +82,36 @@ export default function OrderDetailPage() {
   // 폼 제출
   const onSubmit = (data: OrderFormValues) => {
     console.log("최종 주문 데이터:", data);
-
     openModal();
   };
+  const navigate = useNavigate();
 
   return (
     <FormProvider {...methods}>
+      <div className="w-full flex justify-center mt-8">
+        <div className="w-2/3">
+          <button
+            className="text-sm font-medium text-gray-600 hover:text-pink-600 cursor-pointer transition duration-150"
+            onClick={() => navigate(-1)}
+          >
+            &larr; 뒤로 가기
+          </button>
+        </div>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="min-h-screen pb-10 w-full flex justify-center">
+        <div className="min-h-screen pb-10 w-full flex justify-center mt-8">
           <div className=" w-2/3 aspect-square flex flex-col gap-y-8 justify-center">
             {/* 선택한 케이크 디자인  */}
             {cakeImage && (
               <div className={orderFormCss}>
                 <h3 className="text-2xl font-bold mb-4">선택하신 디자인</h3>
-                <img
-                  src={cakeImage}
-                  alt="선택해서 주문하는 케이크 ㅓ사진"
-                  className="w-full aspect-square object-cover rounded-xl shadow-md"
-                />
+                <div className="flex items-center justify-center w-full">
+                  <img
+                    src={cakeImage}
+                    alt="선택해서 주문하는 케이크 사진"
+                    className="max-w-130 aspect-square object-cover rounded-xl shadow-md"
+                  />
+                </div>
                 {cakeNotice && (
                   <div className="flex items-center text-sm text-red-500 mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
                     <span className="font-semibold">참고 사항:</span>{" "}

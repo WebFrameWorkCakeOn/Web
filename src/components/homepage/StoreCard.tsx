@@ -8,12 +8,13 @@ const StoreCard = ({
   rating,
   location,
   description,
-  imageUrl, // src -> imageUrl로 변경!
+  imageUrl,
+  storeid,
 }: PopularStoreProps) => {
   return (
     <div className="w-full aspect-square border border-black/20 rounded-2xl">
       <img
-        src={imageUrl} // 변경!
+        src={imageUrl}
         alt={name}
         className="w-full h-2/3 object-cover rounded-md mb-4"
       />
@@ -33,11 +34,11 @@ const StoreCard = ({
           </div>
         </div>
         <Link
-          to="/"
+          to={`/store-page/${storeid}`}
           className={`w-1/4 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center ${hoverEffect}`}
         >
           픽업하기
-        </Link>{" "}
+        </Link>
       </div>
     </div>
   );

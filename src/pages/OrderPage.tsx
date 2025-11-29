@@ -100,13 +100,6 @@ export default function OrderPage() {
     handleOrderComplete();
   };
 
-  // 폼 제출
-  // const onSubmit = (data: OrderFormValues) => {
-  //   console.log("최종 주문 데이터:", data);
-  //   console.log("watch 결과 (폼 전체 값):", watch());
-  //   openModal();
-  // };
-
   const onSubmit = async (data: OrderFormValues) => {
     try {
       // 1. 이미지 파일이 있으면 Storage에 업로드
@@ -151,6 +144,16 @@ export default function OrderPage() {
 
   return (
     <FormProvider {...methods}>
+      <div className="w-full flex justify-center mt-8">
+        <div className="w-2/3">
+          <button
+            className="text-sm font-medium text-gray-600 hover:text-pink-600 cursor-pointer transition duration-150"
+            onClick={() => navigate(-1)}
+          >
+            &larr; 뒤로 가기
+          </button>
+        </div>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="min-h-screen pb-10 w-full flex justify-center">
           <div className="h-full w-2/3 flex flex-col gap-y-8 justify-center">
