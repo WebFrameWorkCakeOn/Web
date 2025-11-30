@@ -105,6 +105,7 @@ export interface OrderFormValues {
   fileName: string;
   file?: File | null;
   cakeSize: string;
+  storeid: number;
 }
 
 export const CUSTOM_CAKE_DATA: CakeSize[] = [
