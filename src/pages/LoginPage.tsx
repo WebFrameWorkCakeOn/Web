@@ -1,10 +1,10 @@
 import { Cake } from "lucide-react";
 import { hoverEffect } from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useAuthLogin } from "../hooks/useAuthLogin";
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
+import { Modal } from "../modal/Modal";
 
 interface LoginFormData {
   email: string;
@@ -21,53 +21,15 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({ mode: "onChange" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
 
-  const [firebaseError, setFirebaseError] = useState<string | null>(null); //에러 관리
-  const [successMessage, setSuccessMessage] = useState<string | null>(null); //성공 여부 관리
-
-  const authInstance = getAuth();
-
-  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-    setFirebaseError(null);
-    setSuccessMessage(null);
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        authInstance,
-        data.email,
-        data.password
-      );
-      const user = userCredential.user;
-
-      console.log("로그인 성공:", user.email);
-
-      setSuccessMessage("로그인되었습니다!");
-      setTimeout(() => {
-        navigate("/", { replace: true }); // 메인 페이지로 이동
-      }, 1500);
-    } catch (error: unknown) {
-      console.error("로그인 실패:", error);
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/user-not-found":
-            setFirebaseError("등록된 계정이 없습니다.");
-            break;
-          case "auth/wrong-password":
-            setFirebaseError("비밀번호가 틀렸습니다.");
-            break;
-          case "auth/invalid-email":
-            setFirebaseError("유효하지 않은 이메일 형식입니다.");
-            break;
-          case "auth/too-many-requests":
-            setFirebaseError("비밀번호 재설정 후 다시 시도하세요.");
-            break;
-          default:
-            setFirebaseError("로그인 중 오류가 발생했습니다.");
-        }
-      }
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate("/");
   };
+
+  const { onSubmit, firebaseError } = useAuthLogin(openModal);
 
   return (
     <div className="min-h-screen w-full bg-linear-to-br from-[#FDF2F8] to-[#FFF7ED] flex items-center justify-center p-4">
@@ -96,14 +58,6 @@ const LoginPage = () => {
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-red-600 text-sm text-center">
                 {firebaseError}
-              </p>
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-600 text-sm text-center font-medium">
-                {successMessage}
               </p>
             </div>
           )}
@@ -153,8 +107,8 @@ const LoginPage = () => {
               {...register("password", {
                 required: "비밀번호는 필수 입력 항목입니다.",
                 minLength: {
-                  value: 6,
-                  message: "비밀번호는 최소 6자 이상이어야 합니다.",
+                  value: 8,
+                  message: "비밀번호는 최소 8자 이상이어야 합니다.",
                 },
               })}
             />
@@ -187,6 +141,13 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="로그인 성공!"
+        message="환영합니다! 이제 케이크를 주문해 보세요."
+        buttonText="확인하고 메인으로 이동"
+      />
     </div>
   );
 };
