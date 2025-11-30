@@ -10,7 +10,6 @@ interface StoreState {
   error: Error | null;
 }
 
-// storeid는 숫자 타입으로 유지
 export const useStore = (storeid: number): StoreState => {
   const [store, setStore] = useState<Store | null>(null);
   const [loading, setLoading] = useState(true);

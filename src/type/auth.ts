@@ -8,3 +8,8 @@ export interface SignupFormData {
   userPhone: string;
   role: UserRole;
 }
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+}

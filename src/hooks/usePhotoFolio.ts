@@ -15,7 +15,6 @@ export const usePhotoFolio = (storeid: number): PhotoFolioState => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    // storeid가 없으면 데이터를 불러올 필요가 없습니다.
     if (!storeid) {
       setLoading(false);
       return;
