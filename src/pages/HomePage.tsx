@@ -51,7 +51,7 @@ const HomePage = () => {
           title="인기가게"
           description="검증된 맛집에서 주문하세요"
           linkText="전체 보기"
-          linkTo="/"
+          linkTo="storelist-page"
         />
         <div className="grid grid-cols-3 grid-rows-2 gap-7 justify-center items-center">
           {popularStores.slice(0, 6).map((data, i) => (

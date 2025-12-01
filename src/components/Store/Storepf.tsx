@@ -1,5 +1,5 @@
 import { CircleAlert } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import type { Cake } from "../../type/store";
 
 interface StorefpProps {
@@ -7,6 +7,7 @@ interface StorefpProps {
 }
 
 const Storefp: React.FC<StorefpProps> = ({ cakes }) => {
+  const { id } = useParams<{ id: string }>();
   return (
     <div className="mt-10 p-10 border-t border-gray-200 flex flex-col pt-4">
       <h3>케이크 포트폴리오 ({cakes.length}개)</h3>
@@ -27,7 +28,7 @@ const Storefp: React.FC<StorefpProps> = ({ cakes }) => {
             />
             <div className="w-11/12 mt-3 flex flex-col items-center gap-1">
               <Link
-                to="/order-detail"
+                to={`/order-detail/${id}`}
                 state={{ cakeImage: cake.imageUrl, cakeNotice: cake.notice }}
                 className="w-full h-8 bg-black text-white text-sm rounded py-1.5 transition hover:bg-black/80 flex items-center justify-center"
               >
