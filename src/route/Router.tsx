@@ -8,6 +8,7 @@ import MyPage from "../pages/MyPage";
 import OrderDetailPage from "../pages/OrderDetailPage";
 import SearchResultPage from "../pages/SearchResultPage";
 import SignupPage from "../pages/SignupPage";
+import OrderList from "../pages/OrderList";
 import { AuthLayout } from "../layout/AuthLayout";
 import MyStorePage from "../pages/MyStorePage";
 import MyStoreListPage from "../pages/MyStoreListPage";
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "order/:id",
         element: <OrderPage />,
+      },
+      {
+        path: "order-list",
+        element: <OrderList />,
       },
       {
         path: "store-page/:id",
