@@ -9,6 +9,7 @@ import OrderDetailPage from "../pages/OrderDetailPage";
 import SearchResultPage from "../pages/SearchResultPage";
 import OwnerPage1 from "../pages/OwnerPage";
 import SignupPage from "../pages/SignupPage";
+import OrderList from "../pages/OrderList";
 import { AuthLayout } from "../layout/AuthLayout";
 
 export const router = createBrowserRouter([
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: "order",
         element: <OrderPage />,
+      },
+      {
+        path: "order-list",
+        element: <OrderList />,
       },
       {
         path: "store-page/:id",
