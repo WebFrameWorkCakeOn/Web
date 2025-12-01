@@ -16,6 +16,7 @@ import OwnerPage3 from "../pages/ManageItemPage";
 import AddMenuPage from "../pages/AddMenuPage";
 import AddStorePage from "../pages/AddStorePage";
 import StoreList from "../pages/StoreList";
+import RecommendCakeList from "../pages/RecommendCakeList";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "storelist-page",
         element: <StoreList />,
+      },
+      {
+        path: "recommendcakelist-page",
+        element: <RecommendCakeList />,
       },
       {
         path: "/search-results",

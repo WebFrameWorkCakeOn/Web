@@ -37,7 +37,7 @@ const HomePage = () => {
           title="추천케이크"
           description="인기있는 케이크를 만나보세요!"
           linkText="전체 보기"
-          linkTo="/"
+          linkTo="recommendcakelist-page"
         />
         <div className="flex justify-center items-center gap-x-5">
           {recommendedCakes.map((data) => (
