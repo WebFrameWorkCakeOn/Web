@@ -1,97 +1,18 @@
-import { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  where,
-} from "firebase/firestore";
-import type { DocumentData } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { db } from "../../firebase"; // firebase.ts 경로
-import type { OrderList } from "../../type/order"; // types 경로
+// src/components/OrderListContainer.tsx
+import { useUserOrders } from "../../hooks/useUserOrders"; // 커스텀 훅 import
+import type { OrderList } from "../../type/order";
 import OrderListCard from "./OrderListCard";
 
 export default function OrderListContainer() {
-  const [orders, setOrders] = useState<OrderList[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [userUid, setUserUid] = useState<string | null>(null);
-
-  // 인증 상태 구독 (UID 얻기)
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserUid(user.uid);
-      } else {
-        setUserUid(null);
-        setOrders([]);
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribeAuth();
-  }, []);
-
-  // userUid 변경 시마다 Firestore 구독 설정
-  useEffect(() => {
-    if (!userUid) {
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-
-    const ordersRef = collection(db, "orders");
-    const q = query(
-      ordersRef,
-      where("userId", "==", userUid),
-      orderBy("pickupDateTime", "asc")
-    );
-
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const fetchedOrders: OrderList[] = snapshot.docs.map((doc) => {
-          const data = doc.data() as DocumentData;
-
-          return {
-            id: doc.id,
-            agreed: data.agreed,
-            cakeSize: data.cakeSize,
-            candleCount: data.candleCount,
-            createdAt: data.createdAt,
-            etc: data.etc,
-            fileName: data.fileName,
-            imageUrl: data.imageUrl,
-            isCoolerBagSelected: data.isCoolerBagSelected,
-            message: data.message,
-            pickupDateTime: data.pickupDateTime,
-            selectedFlavorIndex: data.selectedFlavorIndex,
-            selectedShapeIndex: data.selectedShapeIndex,
-            selectedSizeIndex: data.selectedSizeIndex,
-            userName: data.userName,
-            userPhone: data.userPhone,
-          } as OrderList;
-        });
-
-        setOrders(fetchedOrders);
-        setLoading(false);
-      },
-      (error) => {
-        console.error("데이터 로드 에러:", error);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [userUid]);
+  // 훅 호출: 모든 로딩 및 데이터 상태를 여기서 받아옵니다.
+  const { orders, loading, userUid } = useUserOrders();
 
   const handleCardClick = (order: OrderList) => {
     console.log(`${order.userName}님의 주문 상세 페이지로 이동.`);
     // 라우팅 로직 추가 예: router.push(`/orders/${order.id}`)
   };
 
+  // 1. 로딩 상태
   if (loading) {
     return (
       <div className="text-center py-20 text-lg font-medium text-gray-500">
@@ -104,6 +25,19 @@ export default function OrderListContainer() {
     );
   }
 
+  // 2. 로그인되지 않은 상태 (userUid가 null이고 로딩이 끝났을 때)
+  if (!userUid) {
+    return (
+      <div className="text-center py-20 text-gray-400 border border-dashed border-gray-300 rounded-lg mx-auto max-w-xl">
+        <p className="text-xl font-bold text-gray-700">로그인이 필요합니다.</p>
+        <p className="text-sm mt-2">
+          주문 목록을 확인하려면 먼저 로그인해주세요.
+        </p>
+      </div>
+    );
+  }
+
+  // 3. 주문 목록이 없는 상태
   if (orders.length === 0) {
     return (
       <div className="text-center py-20 text-gray-400 border border-dashed border-gray-300 rounded-lg mx-auto max-w-xl">
@@ -112,6 +46,7 @@ export default function OrderListContainer() {
     );
   }
 
+  // 4. 주문 목록 렌더링
   return (
     <div className="max-w-3xl mx-auto space-y-5">
       {orders.map((order) => (
