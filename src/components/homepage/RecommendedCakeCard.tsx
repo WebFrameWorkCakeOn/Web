@@ -9,6 +9,7 @@ const RecommendedCakeCard = ({
   rating,
   price,
   imageUrl, // 수정: src → imageUrl!
+  storeid,
 }: RecommendedCakeProps) => {
   return (
     <div className="w-1/4 aspect-4/5  border border-black/10 rounded-2xl ">
@@ -30,7 +31,7 @@ const RecommendedCakeCard = ({
             {price.toLocaleString()}원
           </div>
           <Link
-            to="order-detail"
+            to={`order-detail/${storeid}`}
             state={{ cakeImage: imageUrl }}
             className={`w-1/3 h-10 rounded-2xl bg-black text-white text-xl flex items-center justify-center ${hoverEffect}`}
           >
