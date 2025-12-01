@@ -5,6 +5,7 @@ export type RecommendedCake = {
   rating: number;
   price: number;
   imageUrl: string;
+  storeid: number;
 };
 
 export type RecommendedCakeProps = RecommendedCake;
