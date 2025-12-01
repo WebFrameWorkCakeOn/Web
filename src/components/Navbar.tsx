@@ -12,6 +12,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logout();
   };
+  const linkcss =
+    "text-black text-sm cursor-pointer hover:text-black/50 transition duration-150";
 
   return (
     <nav className="w-full h-20 bg-white px-10 border-b border-[#000000]/15">
@@ -27,7 +29,9 @@ const Navbar = () => {
           // 로그인 상태
           <div className="flex items-center space-x-6">
             <span className="text-lg font-semibold text-gray-800">
-              안녕하세요, {user.name}님!
+              <Link className={`${linkcss}`} to={"order-list"}>
+                안녕하세요, {user.name}님!
+              </Link>
             </span>
 
             {/* 로그아웃 버튼 */}

@@ -107,6 +107,27 @@ export interface OrderFormValues {
   cakeSize: string;
 }
 
+//주문 목록 프롭스
+export interface OrderList {
+  id: string;
+  agreed: boolean;
+  cakeSize: string;
+  candleCount: number;
+  createdAt: string; // or Date
+  etc: string;
+  fileName: string;
+  imageUrl: string;
+  isCoolerBagSelected: boolean;
+  message: string;
+  pickupDateTime: string;
+  selectedFlavorIndex: string;
+  selectedShapeIndex: number;
+  selectedSizeIndex: string;
+  userName: string;
+  userPhone: string;
+  storeid: number;
+}
+
 export const CUSTOM_CAKE_DATA: CakeSize[] = [
   {
     sizeName: "도시락 케이크",
