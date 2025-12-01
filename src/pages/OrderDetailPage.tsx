@@ -1,8 +1,13 @@
 import { useForm, FormProvider } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
+// Context 및 훅 import
+import { useAuth } from "../context/AuthContext";
+import { useOrderSubmission } from "../hooks/useOrderSubmission";
+
+// 컴포넌트 import
 import { OrderUserInfoForm } from "../components/order/OrderUserInfoForm";
 import { OrderPickupDateTime } from "../components/order/OrderPickupDateTime";
 import { OrderNotices } from "../components/order/OrderNotices";
@@ -14,7 +19,9 @@ import { OrderEtcForm } from "../components/order/OrderEtcForm";
 import { OrderAddsOptions } from "../components/order/OrderAddsOptions";
 import { OrderSummary } from "../components/order/OrderSummary";
 import { OrderConfirmationModal } from "../components/order/OrderConfirmationModal";
+import BackButton from "../components/BackButton";
 
+// 타입 및 스키마 import
 import "react-datepicker/dist/react-datepicker.css";
 import {
   type OrderFormValues,
@@ -23,20 +30,25 @@ import {
   SHAPE_OPTIONS,
 } from "../type/order";
 import { orderFormSchema } from "../schema/orderFormSchema";
-import BackButton from "../components/BackButton";
 
 export default function OrderDetailPage() {
-  // 라우터(state)에서 이미지 정보 가져오기
+  const { id } = useParams<{ id: string }>();
+  const storeIdNumber = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
   const location = useLocation();
-  const { cakeImage, cakeNotice } = location.state || {}; // 디자인 이미지 경로와 공지사항
+  const { cakeImage, cakeNotice } = location.state || {};
+
+  const { user, isLoading: authLoading } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
-      userName: "",
+      storeid: storeIdNumber,
+      userName: user?.name || "",
       userPhone: "",
       pickupDateTime: null,
-      fileName: cakeImage || "", //라우터에서 받은 이미지 넣기
+      fileName: cakeImage || "",
       selectedSizeIndex: null,
       selectedFlavorIndex: null,
       selectedShapeIndex: null,
@@ -60,14 +72,46 @@ export default function OrderDetailPage() {
     formState: { errors, isValid },
   } = methods;
 
-  const selectedSizeIndex = watch("selectedSizeIndex");
-  const selectedFlavorIndex = watch("selectedFlavorIndex");
-  const selectedShapeIndex = watch("selectedShapeIndex");
-  const pickupDateTime = watch("pickupDateTime");
-  const message = watch("message");
-  const etc = watch("etc");
-  const isCoolerBagSelected = watch("isCoolerBagSelected");
+  const handleOrderComplete = () => {
+    navigate("/", { replace: true });
+  }; // 주문 완료 후 홈으로 이동
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    handleOrderComplete();
+  };
+
+  const {
+    submitOrder,
+    isSubmitting,
+    error: submitError,
+  } = useOrderSubmission(openModal, cakeImage);
+
+  // 유저 정보 못받으면 로그인으로
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/login", { replace: true });
+    }
+  }, [authLoading, user, navigate]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>사용자 인증 확인 중...</p>
+      </div>
+    );
+  }
+
   const watchedValues = watch();
+  const {
+    selectedSizeIndex,
+    selectedFlavorIndex,
+    selectedShapeIndex,
+    pickupDateTime,
+    message,
+    etc,
+    isCoolerBagSelected,
+  } = watchedValues;
 
   const orderFormCss =
     "w-full p-10 h-auto border border-[#000000]/15 flex flex-col gap-y-6 rounded-2xl";
@@ -76,15 +120,14 @@ export default function OrderDetailPage() {
     setValue("isCoolerBagSelected", !isCoolerBagSelected);
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  // 폼 제출
   const onSubmit = (data: OrderFormValues) => {
-    console.log("최종 주문 데이터:", data);
-    openModal();
+    submitOrder(data);
   };
+
+  if (submitError) {
+    console.error(submitError);
+    alert(`주문 제출 중 오류가 발생했습니다: ${submitError.message}`);
+  }
 
   return (
     <FormProvider {...methods}>
@@ -96,7 +139,7 @@ export default function OrderDetailPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="min-h-screen pb-10 w-full flex justify-center mt-8">
           <div className=" w-2/3 aspect-square flex flex-col gap-y-8 justify-center">
-            {/* 선택한 케이크 디자인  */}
+            {/* 선택한 케이크 디자인 */}
             {cakeImage && (
               <div className={orderFormCss}>
                 <h3 className="text-2xl font-bold mb-4">선택하신 디자인</h3>
@@ -203,21 +246,21 @@ export default function OrderDetailPage() {
               shapeOptions={SHAPE_OPTIONS}
             />
 
-            {/* 주문 수정/확정 버튼 */}
+            {/* 주문버튼 */}
             <button
               type="submit"
-              disabled={!isValid}
+              disabled={!isValid || isSubmitting}
               className={`
                 mt-8 px-6 py-3 w-full bg-blue-500 text-white rounded-xl 
                 transition-opacity
                 ${
-                  !isValid
+                  !isValid || isSubmitting
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-blue-600"
                 }
               `}
             >
-              주문 수정 및 확정하기
+              {isSubmitting ? "주문 처리 중..." : "주문하기"}
             </button>
 
             <OrderConfirmationModal

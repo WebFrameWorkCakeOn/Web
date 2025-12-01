@@ -1,5 +1,13 @@
-// OrderPage.tsx
 import { useForm, FormProvider } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
+
+// Context 및 훅 import
+import { useAuth } from "../context/AuthContext";
+import { useOrderSubmission } from "../hooks/useOrderSubmission";
+
+// 컴포넌트 import
 import { OrderUserInfoForm } from "../components/order/OrderUserInfoForm";
 import { OrderPickupDateTime } from "../components/order/OrderPickupDateTime";
 import { OrderNotices } from "../components/order/OrderNotices";
@@ -10,6 +18,11 @@ import { OrderMessageForm } from "../components/order/OrderMessageForm";
 import { OrderEtcForm } from "../components/order/OrderEtcForm";
 import { OrderDesignUpload } from "../components/order/OrderDesignUpload";
 import { OrderAddsOptions } from "../components/order/OrderAddsOptions";
+import { OrderSummary } from "../components/order/OrderSummary";
+import { OrderConfirmationModal } from "../components/order/OrderConfirmationModal";
+import BackButton from "../components/BackButton";
+
+// 타입 및 스키마 import
 import "react-datepicker/dist/react-datepicker.css";
 import {
   type OrderFormValues,
@@ -17,45 +30,21 @@ import {
   FLAVOR_OPTIONS,
   SHAPE_OPTIONS,
 } from "../type/order";
-import { OrderSummary } from "../components/order/OrderSummary";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema } from "../schema/orderFormSchema";
-import { useState } from "react";
-import { OrderConfirmationModal } from "../components/order/OrderConfirmationModal";
-import { useNavigate, useParams } from "react-router-dom";
-import { storage, db } from "../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
 
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>();
-  //storeid 넘버로 형변환
   const storeIdNumber = id ? parseInt(id, 10) : 0;
-
   const navigate = useNavigate();
-  const auth = getAuth();
-  const [user, setUser] = useState(auth.currentUser);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      if (!currentUser) {
-        // 로그인 안된 경우 로그인 페이지로 이동
-        navigate("/login");
-      } else {
-        setUser(currentUser);
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, navigate]);
+  const { user, isLoading: authLoading } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
       storeid: storeIdNumber,
-      userName: "",
-      userPhone: "",
+      userName: user?.name || "",
       pickupDateTime: null,
       fileName: "",
       selectedSizeIndex: null,
@@ -81,14 +70,45 @@ export default function OrderPage() {
     formState: { errors, isValid },
   } = methods;
 
-  const selectedSizeIndex = watch("selectedSizeIndex");
-  const selectedFlavorIndex = watch("selectedFlavorIndex");
-  const selectedShapeIndex = watch("selectedShapeIndex");
-  const pickupDateTime = watch("pickupDateTime");
-  const message = watch("message");
-  const etc = watch("etc");
-  const isCoolerBagSelected = watch("isCoolerBagSelected");
+  const handleOrderComplete = () => {
+    navigate("/", { state: { message: "주문 성공!" } });
+  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    handleOrderComplete();
+  };
+  const {
+    submitOrder,
+    isSubmitting,
+    error: submitError,
+  } = useOrderSubmission(openModal);
+
+  // 유저 정보 못받으면 로그인으로
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/login", { replace: true });
+    }
+  }, [authLoading, user, navigate]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>사용자 인증 확인 중...</p>
+      </div>
+    );
+  }
+
   const watchedValues = watch();
+  const {
+    selectedSizeIndex,
+    selectedFlavorIndex,
+    selectedShapeIndex,
+    pickupDateTime,
+    message,
+    etc,
+    isCoolerBagSelected,
+  } = watchedValues;
 
   const orderFormCss =
     "w-full p-10 h-auto border border-[#000000]/15 flex flex-col gap-y-6 rounded-2xl";
@@ -96,75 +116,21 @@ export default function OrderPage() {
   const toggleCoolerBag = () => {
     setValue("isCoolerBagSelected", !isCoolerBagSelected);
   };
-  //주문 하면 홈으로
-  const handleOrderComplete = () => {
-    navigate("/", { state: { message: "주문 성공!" } });
+
+  const onSubmit = (data: OrderFormValues) => {
+    submitOrder(data);
   };
 
-  // 모달 상태 + 함수
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => {
-    setIsModalOpen(false);
-    handleOrderComplete();
-  };
-
-  const onSubmit = async (data: OrderFormValues) => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-
-    try {
-      let imageUrl = "";
-      if (data.file) {
-        const storageRef = ref(
-          storage,
-          `cakeDesigns/${Date.now()}_${data.file.name}`
-        );
-        const snapshot = await uploadBytes(storageRef, data.file);
-        imageUrl = await getDownloadURL(snapshot.ref);
-      }
-
-      await addDoc(collection(db, "orders"), {
-        storeid: storeIdNumber,
-        userId: user.uid, // 로그인 사용자 UID 저장
-        userName: data.userName,
-        userPhone: data.userPhone,
-        pickupDateTime: data.pickupDateTime
-          ? data.pickupDateTime.toISOString()
-          : null,
-        fileName: data.fileName,
-        imageUrl,
-        selectedSizeIndex: data.selectedSizeIndex,
-        selectedFlavorIndex: data.selectedFlavorIndex,
-        selectedShapeIndex: data.selectedShapeIndex,
-        message: data.message,
-        etc: data.etc,
-        agreed: data.agreed,
-        candleCount: data.candleCount,
-        isCoolerBagSelected: data.isCoolerBagSelected,
-        cakeSize: data.cakeSize,
-        createdAt: serverTimestamp(),
-      });
-
-      openModal();
-    } catch (error) {
-      console.error("주문 중 에러 발생:", error);
-      alert("주문 중 오류가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
+  if (submitError) {
+    console.error(submitError);
+    alert(`주문 제출 중 오류가 발생했습니다: ${submitError.message}`);
+  }
 
   return (
     <FormProvider {...methods}>
       <div className="w-full flex justify-center mt-8">
         <div className="w-2/3">
-          <button
-            className="text-sm font-medium text-gray-600 hover:text-pink-600 cursor-pointer transition duration-150"
-            onClick={() => navigate(-1)}
-          >
-            &larr; 뒤로 가기
-          </button>
+          <BackButton />
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -264,15 +230,19 @@ export default function OrderPage() {
             />
             <button
               type="submit"
-              disabled={!isValid}
+              disabled={!isValid || isSubmitting}
               className={`
             mt-8 px-6 py-3 w-full bg-blue-500 text-white rounded-xl 
             transition-opacity
             
-            ${!isValid ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"}
+            ${
+              !isValid || isSubmitting
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-600"
+            }
           `}
             >
-              주문하기
+              {isSubmitting ? "주문 처리 중..." : "주문하기"}
             </button>
             <OrderConfirmationModal
               isOpen={isModalOpen}
