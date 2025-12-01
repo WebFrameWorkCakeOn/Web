@@ -13,6 +13,32 @@ const Navbar = () => {
     await logout();
   };
 
+  const RoleSpecificLink = () => {
+    if (!user) return null;
+
+    let toPath = "";
+    let buttonText = "";
+
+    if (user.role === "owner") {
+      toPath = "/mystore-page";
+      buttonText = "내 가게 보기";
+    } else if (user.role === "customer") {
+      toPath = "/order-list";
+      buttonText = "주문 내역";
+    } else {
+      return null;
+    }
+
+    return (
+      <Link
+        to={toPath}
+        className={`text-black text-xl border border-black/20 rounded-2xl w-auto h-12 flex items-center justify-center ${loginButtonHoverEffect} px-4`}
+      >
+        {buttonText}
+      </Link>
+    );
+  };
+
   return (
     <nav className="w-full h-20 bg-white px-10 border-b border-[#000000]/15">
       <div className="flex items-center justify-between h-full">
@@ -27,9 +53,13 @@ const Navbar = () => {
           // 로그인 상태
           <div className="flex items-center space-x-6">
             <span className="text-lg font-semibold text-gray-800">
-              안녕하세요, {user.name}님!
+              안녕하세요, {user.name}님!{" "}
+              {user.role == "owner" && (
+                <span className="text-pink-500">(사장님)</span>
+              )}
             </span>
-
+            {/*사용자 = 주문 내역 보기 / 사장님 = 내 가게 보기 */}
+            <RoleSpecificLink />
             {/* 로그아웃 버튼 */}
             <button
               onClick={handleLogout}
