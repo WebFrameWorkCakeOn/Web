@@ -17,6 +17,7 @@ const Storeinfo: React.FC<Store> = ({
   openingHours,
   pickupNote,
   pickupLinkText,
+  storeid,
 }) => {
   const textcss2 = "text-xs text-black/40 text-bold";
 
@@ -88,7 +89,7 @@ const Storeinfo: React.FC<Store> = ({
 
       <Link
         className="mt-4 flex-1 w-full bg-black text-white py-3 rounded hover:bg-black/80 text-center block"
-        to={"/order"}
+        to={`/order/${storeid}`}
       >
         픽업 주문하기
       </Link>

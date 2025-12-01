@@ -105,6 +105,7 @@ export interface OrderFormValues {
   fileName: string;
   file?: File | null;
   cakeSize: string;
+  storeid: number;
 }
 
 //주문 목록 프롭스

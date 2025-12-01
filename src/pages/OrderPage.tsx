@@ -22,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { orderFormSchema } from "../schema/orderFormSchema";
 import { useState } from "react";
 import { OrderConfirmationModal } from "../components/order/OrderConfirmationModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { storage, db } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -30,6 +30,10 @@ import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
 
 export default function OrderPage() {
+  const { id } = useParams<{ id: string }>();
+  //storeid 넘버로 형변환
+  const storeIdNumber = id ? parseInt(id, 10) : 0;
+
   const navigate = useNavigate();
   const auth = getAuth();
   const [user, setUser] = useState(auth.currentUser);
@@ -49,6 +53,7 @@ export default function OrderPage() {
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
+      storeid: storeIdNumber,
       userName: "",
       userPhone: "",
       pickupDateTime: null,
@@ -122,6 +127,7 @@ export default function OrderPage() {
       }
 
       await addDoc(collection(db, "orders"), {
+        storeid: storeIdNumber,
         userId: user.uid, // 로그인 사용자 UID 저장
         userName: data.userName,
         userPhone: data.userPhone,
