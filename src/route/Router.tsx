@@ -7,9 +7,13 @@ import StorePage from "../pages/StorePage";
 import MyPage from "../pages/MyPage";
 import OrderDetailPage from "../pages/OrderDetailPage";
 import SearchResultPage from "../pages/SearchResultPage";
-import OwnerPage1 from "../pages/OwnerPage";
 import SignupPage from "../pages/SignupPage";
 import { AuthLayout } from "../layout/AuthLayout";
+import MyStorePage from "../pages/MyStorePage";
+import MyStoreListPage from "../pages/MyStoreListPage";
+import OwnerPage3 from "../pages/ManageItemPage";
+import AddMenuPage from "../pages/AddMenuPage";
+import AddStorePage from "../pages/AddStorePage";
 
 export const router = createBrowserRouter([
   {
@@ -42,15 +46,25 @@ export const router = createBrowserRouter([
         element: <SearchResultPage />,
       },
       {
-        path: "owner-page1",
-        element: <OwnerPage1 />,
+        path: "mystore-page",
+        element: <MyStorePage />,
       },
-
-      // 나중에 "/about" 페이지를 추가하고 싶다면 여기에 추가하면 됨,, 상욱아
-      // {
-      //   path: "about", 이게 페이지 주소
-      //   element: <AboutPage /> 이게 컴포넌트
-      // }
+      {
+        path: "mystoreList-page",
+        element: <MyStoreListPage />,
+      },
+      {
+        path: "manage-items",
+        element: <OwnerPage3 />,
+      },
+      {
+        path: "add-menuitems",
+        element: <AddMenuPage />,
+      },
+      {
+        path: "add-store",
+        element: <AddStorePage />,
+      },
     ],
   },
   {

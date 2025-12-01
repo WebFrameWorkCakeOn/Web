@@ -1,5 +1,5 @@
 import { useForm, FormProvider } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
@@ -23,6 +23,7 @@ import {
   SHAPE_OPTIONS,
 } from "../type/order";
 import { orderFormSchema } from "../schema/orderFormSchema";
+import BackButton from "../components/BackButton";
 
 export default function OrderDetailPage() {
   // 라우터(state)에서 이미지 정보 가져오기
@@ -84,18 +85,12 @@ export default function OrderDetailPage() {
     console.log("최종 주문 데이터:", data);
     openModal();
   };
-  const navigate = useNavigate();
 
   return (
     <FormProvider {...methods}>
       <div className="w-full flex justify-center mt-8">
         <div className="w-2/3">
-          <button
-            className="text-sm font-medium text-gray-600 hover:text-pink-600 cursor-pointer transition duration-150"
-            onClick={() => navigate(-1)}
-          >
-            &larr; 뒤로 가기
-          </button>
+          <BackButton />
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
